@@ -18,7 +18,7 @@ namespace AntSimCS
         {
             List<int> SimulationParameters = new List<int>();
             Console.Write("Enter simulation number: ");
-            string SimNo = Console.ReadLine();
+            string? SimNo = Console.ReadLine();
             switch (SimNo)
             {
                 case "1":
@@ -32,6 +32,9 @@ namespace AntSimCS
                     break;
                 case "4":
                     SimulationParameters = new List<int> { 2, 10, 10, 500, 3, 6, 1000, 25 };
+                    break;
+                default:
+                    SimulationParameters = new List<int> { 1, 5, 5, 500, 3, 5, 1000, 50 };
                     break;
             }
             Simulation ThisSimulation = new Simulation(SimulationParameters);
@@ -86,7 +89,7 @@ namespace AntSimCS
 
         static string GetChoice()
         {
-            string Choice = Console.ReadLine();
+            string? Choice = Console.ReadLine();
             return Choice;
         }
 
@@ -148,7 +151,7 @@ namespace AntSimCS
                     } while (!Allowed);
                     SetUpANestAt(Row, Column);
                 }
-                // addin food to random cell with no nest
+                // add food to random cell without nest
                 for (int Count = 1; Count <= StartingNumberOfFoodCells; Count++)
                 {
                     bool Allowed;
@@ -183,8 +186,8 @@ namespace AntSimCS
             {
                 Grid[GetIndex(Row, Column)].UpdateFoodInCell(Quantity);
             }
-            // convert 2D coordinates to 1D index for list
-            private int GetIndex(int Row, int Column) 
+            private int GetIndex(int Row, int Column) // convert 2D coordinates to 1D index for list
+
             {
                 return (Row - 1) * NumberOfColumns + Column - 1;
             }
@@ -234,7 +237,7 @@ namespace AntSimCS
                         return N;
                     }
                 }
-                return null;
+                return null; // if no nest is found
             }
 
             public void UpdateAntsPheromoneInCell(Ant A)
@@ -410,12 +413,12 @@ namespace AntSimCS
 
             public void AdvanceStage(int NumberOfStages)
             {
-                for (int Count = 1; Count <= NumberOfStages; Count++)
+                for (int Count = 1; Count <= NumberOfStages; Count++) // recusively advance stage by 1
                 {
                     List<Pheromone> PheromonesToDelete = new List<Pheromone>();
-                    foreach (Pheromone P in Pheromones)
+                    foreach (Pheromone P in Pheromones) 
                     {
-                        P.AdvanceStage(Nests, Ants, Pheromones); // recusively advance stage by 1
+                        P.AdvanceStage(Nests, Ants, Pheromones); 
                         if (P.GetStrength() == 0)
                         {
                             PheromonesToDelete.Add(P);
@@ -506,10 +509,10 @@ namespace AntSimCS
         {
             protected int AmountOfFood;
 
-            public Cell(int StartRow, int StartColumn) : base(StartRow, StartColumn)
+            public Cell(int StartRow, int StartColumn) : base(StartRow, StartColumn) // constructor
             {
                 AmountOfFood = 0;
-            } // constructor
+            }
 
             public int GetAmountOfFood()
             {
