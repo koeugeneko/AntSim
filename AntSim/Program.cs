@@ -463,6 +463,11 @@ namespace AntSimCS
                     }
                 }
             }
+
+            public void GetGridSize()
+            {
+                Console.WriteLine($"Grid size: {NumberOfRows} x {NumberOfColumns}");
+            }
         }
 
         class Entity
