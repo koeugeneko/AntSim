@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace AntSimCS
 {
     class Program
@@ -69,6 +70,13 @@ namespace AntSimCS
                         ThisSimulation.AdvanceStage(NumberOfStages);
                         Console.WriteLine($"Simulation moved on {NumberOfStages} stages{Environment.NewLine}");
                         break;
+                    case "6":
+                        ThisSimulation.GetGridSize();
+                        break;
+                    case "7":
+                        ThisSimulation.GetTotoalFoodOnGrid();
+                        break;
+
                 }
             } while (Choice != "9");
             Console.ReadLine();
@@ -82,6 +90,8 @@ namespace AntSimCS
             Console.WriteLine("3. Inspect cell");
             Console.WriteLine("4. Advance one stage");
             Console.WriteLine("5. Advance X stages");
+            Console.WriteLine("6. Get grid size of the current simulation");
+            Console.WriteLine("7. Get total food on grid");
             Console.WriteLine("9. Quit");
             Console.WriteLine();
             Console.Write("> ");
@@ -464,9 +474,23 @@ namespace AntSimCS
                 }
             }
 
-            public void GetGridSize()
+            public void GetGridSize() // Not in orginal
             {
                 Console.WriteLine($"Grid size: {NumberOfRows} x {NumberOfColumns}");
+            }
+
+            public void GetTotoalFoodOnGrid() // Not in orginal
+            {
+                int TotalFood = 0;
+                for(int row = 0; row <= NumberOfRows - 1; row++)
+                {
+                    for(int col = 0; col <= NumberOfColumns - 1; col++)
+                    {
+                        Cell currentcell = Grid[GetIndex(row, col)];
+                        TotalFood += currentcell.GetAmountOfFood();
+                    }
+                }
+                Console.WriteLine($"Total food: {TotalFood}");
             }
         }
 
