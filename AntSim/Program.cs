@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 
 
@@ -76,9 +77,15 @@ namespace AntSimCS
                     case "7":
                         ThisSimulation.GetTotoalFoodOnGrid();
                         break;
+                    case "8":
+                        ThisSimulation.GetAntTypeCounts();
+                        break;
+                    case "9":
+                        ThisSimulation.GetCellWithMostFood();
+                        break;
 
                 }
-            } while (Choice != "9");
+            } while (Choice != "0");
             Console.ReadLine();
         }
 
@@ -92,7 +99,9 @@ namespace AntSimCS
             Console.WriteLine("5. Advance X stages");
             Console.WriteLine("6. Get grid size of the current simulation");
             Console.WriteLine("7. Get total food on grid");
-            Console.WriteLine("9. Quit");
+            Console.WriteLine("8. Get ant type count");
+            Console.WriteLine("9. Get the grid with Max amout of food");
+            Console.WriteLine("0. Quit");
             Console.WriteLine();
             Console.Write("> ");
         }
@@ -197,7 +206,6 @@ namespace AntSimCS
                 Grid[GetIndex(Row, Column)].UpdateFoodInCell(Quantity);
             }
             private int GetIndex(int Row, int Column) // convert 2D coordinates to 1D index for list
-
             {
                 return (Row - 1) * NumberOfColumns + Column - 1;
             }
@@ -481,16 +489,55 @@ namespace AntSimCS
 
             public void GetTotoalFoodOnGrid() // Not in orginal
             {
-                int TotalFood = 0;
-                for(int row = 0; row <= NumberOfRows - 1; row++)
+                int totalFood = 0;
+                for(int row = 1; row <= NumberOfRows; row++)
                 {
-                    for(int col = 0; col <= NumberOfColumns - 1; col++)
+                    for(int col = 1; col <= NumberOfColumns; col++)
                     {
-                        Cell currentcell = Grid[GetIndex(row, col)];
-                        TotalFood += currentcell.GetAmountOfFood();
+                        Cell currentCell = Grid[GetIndex(row, col)];
+                        totalFood += currentCell.GetAmountOfFood();
+
                     }
                 }
-                Console.WriteLine($"Total food: {TotalFood}");
+                Console.WriteLine($"Total food: {totalFood}");
+            }
+
+            public void GetAntTypeCounts()// Not in orginal
+            {
+                int totalQueenAnt = 0;
+                int totoalWorkerAnt = 0;
+                foreach (Ant A in Ants)
+                {
+                    if (A.GetTypeOfAnt() == "queen")
+                    {
+                        totalQueenAnt++;
+                    }
+                    else if (A.GetTypeOfAnt() == "worker")
+                    {
+                        totoalWorkerAnt++;
+                    }
+                }
+               
+                Console.WriteLine($"Number of queens: {totalQueenAnt}, Number of workers: {totoalWorkerAnt}");
+
+            }
+
+            public void GetCellWithMostFood() // Not in orginal
+            {   
+                Cell mostFoodCell = Grid[GetIndex(1, 1)];
+
+                for (int row = 1; row <= NumberOfRows; row++)
+                {
+                    for (int col = 1; col <= NumberOfColumns; col++)
+                    {
+                        Cell currentCell = Grid[GetIndex(row, col)];
+                        if (currentCell.GetAmountOfFood() > mostFoodCell.GetAmountOfFood())
+                        {   
+                            mostFoodCell = currentCell; 
+                        }
+                    }
+                }
+                Console.WriteLine($"{mostFoodCell.GetRow()}, {mostFoodCell.GetColumn()}");
             }
         }
 
