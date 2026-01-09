@@ -72,20 +72,20 @@ namespace AntSimCS
                         Console.WriteLine($"Simulation moved on {NumberOfStages} stages{Environment.NewLine}");
                         break;
                     case "6":
-                        ThisSimulation.GetGridSize();
+                        Console.WriteLine(ThisSimulation.GetGridSize());
                         break;
                     case "7":
-                        ThisSimulation.GetTotoalFoodOnGrid();
+                        Console.WriteLine(ThisSimulation.GetTotalFoodOnGrid());
                         break;
                     case "8":
-                        ThisSimulation.GetAntTypeCounts();
+                        Console.WriteLine(ThisSimulation.GetAntTypeCounts());
                         break;
                     case "9":
-                        ThisSimulation.GetCellWithMostFood();
+                        Console.WriteLine(ThisSimulation.GetCellWithMostFood());
                         break;
 
                 }
-            } while (Choice != "0");
+            } while (Choice != "0"); // I changed the choice for quit form 9 to 0 to give more options
             Console.ReadLine();
         }
 
@@ -100,7 +100,7 @@ namespace AntSimCS
             Console.WriteLine("6. Get grid size of the current simulation");
             Console.WriteLine("7. Get total food on grid");
             Console.WriteLine("8. Get ant type count");
-            Console.WriteLine("9. Get the grid with Max amout of food");
+            Console.WriteLine("9. Get the grid with Max amount of food");
             Console.WriteLine("0. Quit");
             Console.WriteLine();
             Console.Write("> ");
@@ -482,12 +482,12 @@ namespace AntSimCS
                 }
             }
 
-            public void GetGridSize() // Not in orginal
+            public string GetGridSize() // Not in original
             {
-                Console.WriteLine($"Grid size: {NumberOfRows} x {NumberOfColumns}");
+                return $"Grid size: {NumberOfRows} x {NumberOfColumns}";
             }
 
-            public void GetTotoalFoodOnGrid() // Not in orginal
+            public string GetTotalFoodOnGrid() // Not in original
             {
                 int totalFood = 0;
                 for(int row = 1; row <= NumberOfRows; row++)
@@ -499,13 +499,13 @@ namespace AntSimCS
 
                     }
                 }
-                Console.WriteLine($"Total food: {totalFood}");
+                return $"Total food: {totalFood}";
             }
 
-            public void GetAntTypeCounts()// Not in orginal
+            public string GetAntTypeCounts()// Not in original
             {
                 int totalQueenAnt = 0;
-                int totoalWorkerAnt = 0;
+                int totalWorkerAnt = 0;
                 foreach (Ant A in Ants)
                 {
                     if (A.GetTypeOfAnt() == "queen")
@@ -514,15 +514,15 @@ namespace AntSimCS
                     }
                     else if (A.GetTypeOfAnt() == "worker")
                     {
-                        totoalWorkerAnt++;
+                        totalWorkerAnt++;
                     }
                 }
                
-                Console.WriteLine($"Number of queens: {totalQueenAnt}, Number of workers: {totoalWorkerAnt}");
+                return $"Number of queens: {totalQueenAnt}, Number of workers: {totalWorkerAnt}";
 
             }
 
-            public void GetCellWithMostFood() // Not in orginal
+            public string GetCellWithMostFood() // Not in original
             {   
                 Cell mostFoodCell = Grid[GetIndex(1, 1)];
 
@@ -537,7 +537,20 @@ namespace AntSimCS
                         }
                     }
                 }
-                Console.WriteLine($"{mostFoodCell.GetRow()}, {mostFoodCell.GetColumn()}");
+                return $"{mostFoodCell.GetRow()}, {mostFoodCell.GetColumn()}";
+            }
+
+            public void GetIsolatedAnts() // Not in original
+            {
+                for(int row = 1; row <= NumberOfRows; row++)
+                {
+                    for(int coll = 1; coll <= NumberOfColumns; coll++)
+                    {
+                        // if corner, 3 box around
+                        // if side, 5 box around
+                        // if mid, 8 box around
+                    }
+                }
             }
         }
 
