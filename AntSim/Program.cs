@@ -83,6 +83,9 @@ namespace AntSimCS
                     case "9":
                         Console.WriteLine(ThisSimulation.GetCellWithMostFood());
                         break;
+                    case "10":
+                        Console.WriteLine(ThisSimulation.GetIsolatedAnts());
+                        break;
 
                 }
             } while (Choice != "0"); // I changed the choice for quit form 9 to 0 to give more options
@@ -101,6 +104,7 @@ namespace AntSimCS
             Console.WriteLine("7. Get total food on grid");
             Console.WriteLine("8. Get ant type count");
             Console.WriteLine("9. Get the grid with Max amount of food");
+            Console.WriteLine("10. Get isolated ants");
             Console.WriteLine("0. Quit");
             Console.WriteLine();
             Console.Write("> ");
@@ -540,17 +544,45 @@ namespace AntSimCS
                 return $"{mostFoodCell.GetRow()}, {mostFoodCell.GetColumn()}";
             }
 
-            public void GetIsolatedAnts() // Not in original
+            public string GetIsolatedAnts() // Not in original AI
             {
-                for(int row = 1; row <= NumberOfRows; row++)
+                List<string> isolatedAnts = new List<string>();
+
+                foreach (Ant A in Ants)
                 {
-                    for(int coll = 1; coll <= NumberOfColumns; coll++)
+                    int antRow = A.GetRow();
+                    int antCol = A.GetColumn();
+                    bool isIsolated = true;
+
+                    List<int> neighbours = GetIndicesOfNeighbours(antRow, antCol);
+
+                    foreach (int neighbourIndex in neighbours)
                     {
-                        // if corner, 3 box around
-                        // if side, 5 box around
-                        // if mid, 8 box around
+                        if (neighbourIndex != -1) // 有效鄰居
+                        {
+                            Cell neighbourCell = Grid[neighbourIndex];
+
+                            // 如果鄰居格有其他螞蟻,則不孤立
+                            if (GetNumberOfAntsInCell(neighbourCell) > 0)
+                            {
+                                isIsolated = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (isIsolated)
+                    {
+                        isolatedAnts.Add($"Ant {A.GetID()} at ({antRow}, {antCol})");
                     }
                 }
+
+                if (isolatedAnts.Count == 0)
+                {
+                    return "No isolated ants found.";
+                }
+
+                return $"Isolated ants:\n{string.Join("\n", isolatedAnts)}";
             }
         }
 
