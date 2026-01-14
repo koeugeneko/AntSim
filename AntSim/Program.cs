@@ -24,6 +24,8 @@ namespace AntSimCS
             switch (SimNo)
             {
                 case "1":
+// StartingNumberOfNests | NumberOfRows | NumberOfColumns | StartingFoodInNest | 
+// StartingNumberOfFoodCells | StartingAntsInNest | NewPheromoneStrength | PheromoneDecay
                     SimulationParameters = new List<int> { 1, 5, 5, 500, 3, 5, 1000, 50 };
                     break;
                 case "2":
@@ -544,7 +546,7 @@ namespace AntSimCS
                 return $"{mostFoodCell.GetRow()}, {mostFoodCell.GetColumn()}";
             }
 
-            public string GetIsolatedAnts() // Not in original AI
+            public string GetIsolatedAnts() // Not in original // AI
             {
                 List<string> isolatedAnts = new List<string>();
 
@@ -558,11 +560,10 @@ namespace AntSimCS
 
                     foreach (int neighbourIndex in neighbours)
                     {
-                        if (neighbourIndex != -1) // 有效鄰居
+                        if (neighbourIndex != -1)
                         {
                             Cell neighbourCell = Grid[neighbourIndex];
 
-                            // 如果鄰居格有其他螞蟻,則不孤立
                             if (GetNumberOfAntsInCell(neighbourCell) > 0)
                             {
                                 isIsolated = false;
@@ -583,6 +584,11 @@ namespace AntSimCS
                 }
 
                 return $"Isolated ants:\n{string.Join("\n", isolatedAnts)}";
+            }
+
+            public void PredictFoodDepletion( int nestID)
+            {
+                
             }
         }
 
@@ -803,6 +809,37 @@ namespace AntSimCS
                 {
                     int IndexToUse = ListOfNeighbours.IndexOf(IndexOfNeighbourWithStrongestPheromone);
                     ChangeCell(IndexToUse, ref Row, ref Column);
+                }
+            }
+        }
+
+        class ScoutAnt : Ant // Not in original // move 2 cells every stage, remains stronger pheromone
+        {
+            public ScoutAnt(int StartRow, int StartColumn, int NestInRow, int NestInColumn)
+                : base(StartRow, StartColumn, NestInRow, NestInColumn)
+            {
+                TypeOfAnt = "scout";
+                FoodCapacity = 0;
+            }
+            
+            public override void ChooseCellToMoveTo(List<int> ListOfNeighbours, int IndexOfNeighbourWithStrongestPheromone)
+            {
+                if (IndexOfNeighbourWithStrongestPheromone == -1)
+                {   
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int IndexToUse = ChooseRandomNeighbour(ListOfNeighbours);
+                        ChangeCell(IndexToUse, ref Row, ref Column);
+                    }
+                    
+                }
+                else
+                {   
+                    for (int i = 0; i <= 2; i++)
+                    {
+                        int IndexToUse = ListOfNeighbours.IndexOf(IndexOfNeighbourWithStrongestPheromone);
+                        ChangeCell(IndexToUse, ref Row, ref Column);
+                    }
                 }
             }
         }
