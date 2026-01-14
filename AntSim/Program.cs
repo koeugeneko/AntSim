@@ -13,7 +13,8 @@ using System.Linq;
 namespace AntSimCS
 {
     class Program
-    {
+    {   
+        // Static member - used by all objects
         public static Random RGen = new Random();
 
         static void Main()
@@ -130,7 +131,7 @@ namespace AntSimCS
         
         class Simulation
         {
-            protected List<Cell> Grid = new List<Cell>();
+            protected List<Cell> Grid = new List<Cell>(); // Composition - "has-a" relationship
             protected List<Ant> Ants = new List<Ant>();
             protected List<Pheromone> Pheromones = new List<Pheromone>();
             protected List<Nest> Nests = new List<Nest>();
@@ -216,7 +217,7 @@ namespace AntSimCS
                 return (Row - 1) * NumberOfColumns + Column - 1;
             }
 
-            private List<int> GetIndicesOfNeighbours(int Row, int Column)
+            private List<int> GetIndicesOfNeighbours(int Row, int Column) // Encapsulation - use of GET/SET and accesss modifiers
             {
                 List<int> ListOfNeighbours = new List<int>();
                 foreach (int RowDirection in new int[] { -1, 0, 1 })
@@ -439,7 +440,7 @@ namespace AntSimCS
             {
                 for (int Count = 1; Count <= NumberOfStages; Count++) // recusively advance stage by 1
                 {
-                    List<Pheromone> PheromonesToDelete = new List<Pheromone>();
+                    List<Pheromone> PheromonesToDelete = new List<Pheromone>(); // deal with pheromoes
                     foreach (Pheromone P in Pheromones) 
                     {
                         P.AdvanceStage(Nests, Ants, Pheromones); 
@@ -452,7 +453,7 @@ namespace AntSimCS
                     {
                         Pheromones.Remove(P);
                     }   
-                    foreach (Ant A in Ants)
+                    foreach (Ant A in Ants) // Abstraction - no matter ant type // deal with ants
                     {
                         A.AdvanceStage(Nests, Ants, Pheromones);
                         Cell CurrentCell = Grid[GetIndex(A.GetRow(), A.GetColumn())];
@@ -493,6 +494,7 @@ namespace AntSimCS
                 return $"Grid size: {NumberOfRows} x {NumberOfColumns}";
             }
 
+            
             public string GetTotalFoodOnGrid() // Not in original
             {
                 int totalFood = 0;
@@ -586,9 +588,15 @@ namespace AntSimCS
                 return $"Isolated ants:\n{string.Join("\n", isolatedAnts)}";
             }
 
-            public void PredictFoodDepletion( int nestID)
+            public void PredictFoodDepletion(int nestID) // TODO
             {
-                
+                for(int row = 1; row <= NumberOfRows; row++)
+                {
+                    for(int col = 1; col <= NumberOfColumns; col++)
+                    {
+
+                    }
+                }
             }
         }
 
@@ -632,11 +640,11 @@ namespace AntSimCS
             }
         }
 
-        class Cell : Entity
+        class Cell : Entity // Inheritance - "is-a" relationship
         {
             protected int AmountOfFood;
 
-            public Cell(int StartRow, int StartColumn) : base(StartRow, StartColumn) // constructor
+            public Cell(int StartRow, int StartColumn) : base(StartRow, StartColumn) // Constructor
             {
                 AmountOfFood = 0;
             }
@@ -646,7 +654,7 @@ namespace AntSimCS
                 return AmountOfFood;
             }
 
-            public override string GetDetails()
+            public override string GetDetails() // Polymorphism - override and virtual methods
             {
                 return $"{base.GetDetails()}{AmountOfFood} food present{Environment.NewLine}{Environment.NewLine}";
             }
@@ -813,7 +821,7 @@ namespace AntSimCS
             }
         }
 
-        class ScoutAnt : Ant // Not in original // move 2 cells every stage, remains stronger pheromone
+        class ScoutAnt : Ant // Not in original // move 2 cells every stage
         {
             public ScoutAnt(int StartRow, int StartColumn, int NestInRow, int NestInColumn)
                 : base(StartRow, StartColumn, NestInRow, NestInColumn)
@@ -835,7 +843,7 @@ namespace AntSimCS
                 }
                 else
                 {   
-                    for (int i = 0; i <= 2; i++)
+                    for (int i = 0; i < 2; i++)
                     {
                         int IndexToUse = ListOfNeighbours.IndexOf(IndexOfNeighbourWithStrongestPheromone);
                         ChangeCell(IndexToUse, ref Row, ref Column);
@@ -918,7 +926,7 @@ namespace AntSimCS
                         {
                             RPos = RGen.Next(0, Ants.Count);
                         } while (!(Ants[RPos].GetNestRow() == Row && Ants[RPos].GetNestColumn() == Column));
-                        if (Ants[RPos].GetTypeOfAnt() == "queen") //kills the queen if not enough food
+                        if (Ants[RPos].GetTypeOfAnt() == "queen") 
                         {
                             NumberOfQueens--;
                         }
