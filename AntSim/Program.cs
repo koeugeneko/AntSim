@@ -33,6 +33,9 @@ namespace AntSimCS
                 case "4":
                     SimulationParameters = new List<int> { 2, 10, 10, 500, 3, 6, 1000, 25 };
                     break;
+                default:
+                    Main();
+                    break;
             }
             Simulation ThisSimulation = new Simulation(SimulationParameters);
             string Choice;
@@ -66,6 +69,7 @@ namespace AntSimCS
                         ThisSimulation.AdvanceStage(NumberOfStages);
                         Console.WriteLine($"Simulation moved on {NumberOfStages} stages{Environment.NewLine}");
                         break;
+                    
                 }
             } while (Choice != "9");
             Console.ReadLine();
