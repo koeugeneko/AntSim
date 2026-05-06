@@ -457,11 +457,13 @@ namespace AntSimCS
                         N.AdvanceStage(Nests, Ants, Pheromones);
                     }
                 }
+
+                HasSimulationEnded();
             }
-            
 
             public void HasSimulationEnded()
             {
+                // all ant died
                 for (int rows = 0; rows <= NumberOfRows; rows++)
                 {
                     for (int cols = 0; cols <= NumberOfColumns; cols++)
@@ -469,22 +471,28 @@ namespace AntSimCS
                         Cell c = new Cell(rows, cols);
                         if (GetNumberOfAntsInCell(c) == 0)
                         {
-                            //sim end due to not enouch ants
+                            Console.WriteLine("Sim ended due to all the ants died");
+                            Environment.Exit(0);
                         }
-                        
                     }
+                }
 
+                // no more food
+                for (int rows = 0; rows <= NumberOfRows; rows++)
+                {
+                    for (int cols = 0; cols <= NumberOfColumns; cols++)
+                    {
+                        Cell c = new Cell(rows, cols);
+                        if (c.GetAmountOfFood() == 0)
+                        {
+                            Console.WriteLine("Sim ended due to no more food within the sim");
+                            Environment.Exit(0);
+                        }
+                    }
                 }
             }
             
-            public void GetEndReason()
-            {
-
-            }
-            public void WriteToFile()
-            {
-                File.WriteAllText("C:\\Test.txt", "Hello World!");
-            }
+         
         }
 
         class Entity
