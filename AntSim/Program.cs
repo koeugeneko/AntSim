@@ -651,14 +651,6 @@ namespace AntSimCS
             {
                 if (AmountOfFoodCarried > 0)
                 {
-                    if (Row > NestRow)
-                    {
-                        Row--;
-                    }
-                    else if (Row < NestRow)
-                    {
-                        Row++;
-                    }
                     if (Column > NestColumn)
                     {
                         Column--;
@@ -667,8 +659,41 @@ namespace AntSimCS
                     {
                         Column++;
                     }
+                    if (Row > NestRow)
+                    {
+                        Row--;
+                    }
+                    else if (Row < NestRow)
+                    {
+                        Row++;
+                    }
+                    
                 }
                 else if (IndexOfNeighbourWithStrongestPheromone == -1)
+                {
+                    int IndexToUse = ChooseRandomNeighbour(ListOfNeighbours);
+                    ChangeCell(IndexToUse, ref Row, ref Column);
+                }
+                else
+                {
+                    int IndexToUse = ListOfNeighbours.IndexOf(IndexOfNeighbourWithStrongestPheromone);
+                    ChangeCell(IndexToUse, ref Row, ref Column);
+                }
+            }
+        }
+
+        class ForagerAnt : Ant
+        {
+            public ForagerAnt(int StartRow, int StartColumn, int NestInRow, int NestInColumn)
+                : base(StartRow, StartColumn, NestInRow, NestInColumn)
+            {
+                TypeOfAnt = "forager";
+                FoodCapacity = 50;
+            }
+
+            public override void ChooseCellToMoveTo(List<int> ListOfNeighbours, int IndexOfNeighbourWithStrongestPheromone)
+            {
+                if (IndexOfNeighbourWithStrongestPheromone == -1)
                 {
                     int IndexToUse = ChooseRandomNeighbour(ListOfNeighbours);
                     ChangeCell(IndexToUse, ref Row, ref Column);
@@ -799,7 +824,7 @@ namespace AntSimCS
 
             public override void AdvanceStage(List<Nest> Nests, List<Ant> Ants, List<Pheromone> Pheromones)
             {
-                Strength = Convert.ToInt32(Strength * (PheromoneDecay/100));
+                Strength -= PheromoneDecay;
                 if (Strength < 0)
                 {
                     Strength = 0;
