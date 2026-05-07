@@ -66,17 +66,8 @@ namespace AntSimCS
                         ThisSimulation.AdvanceStage(NumberOfStages);
                         Console.WriteLine($"Simulation moved on {NumberOfStages} stages{Environment.NewLine}");
                         break;
-                    case "9":
-                        Console.WriteLine("Confirm to quit (y/n)");
-                        char confirmQuit = Convert.ToChar(Console.ReadLine());
-                        if (confirmQuit == 'y')
-                        {
-                            Console.WriteLine("Sim ended");
-                            Environment.Exit(0);
-                        }
-                        break;
                 }
-            } while (true);
+            } while (Choice != "9");
             Console.ReadLine();
         }
 
@@ -677,7 +668,7 @@ namespace AntSimCS
                         Column++;
                     }
                 }
-                else if (IndexOfNeighbourWithStrongestPheromone == -1)
+                else if (IndexOfNeighbourWithStrongestPheromone == -1 || RGen.Next(1, 11) <= 2)
                 {
                     int IndexToUse = ChooseRandomNeighbour(ListOfNeighbours);
                     ChangeCell(IndexToUse, ref Row, ref Column);
