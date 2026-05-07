@@ -668,7 +668,7 @@ namespace AntSimCS
                         Column++;
                     }
                 }
-                else if (IndexOfNeighbourWithStrongestPheromone == -1 || RGen.Next(1, 11) <= 2)
+                else if (IndexOfNeighbourWithStrongestPheromone == -1)
                 {
                     int IndexToUse = ChooseRandomNeighbour(ListOfNeighbours);
                     ChangeCell(IndexToUse, ref Row, ref Column);
@@ -799,7 +799,7 @@ namespace AntSimCS
 
             public override void AdvanceStage(List<Nest> Nests, List<Ant> Ants, List<Pheromone> Pheromones)
             {
-                Strength -= PheromoneDecay;
+                Strength = Convert.ToInt32(Strength * (PheromoneDecay/100));
                 if (Strength < 0)
                 {
                     Strength = 0;
